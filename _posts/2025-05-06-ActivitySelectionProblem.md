@@ -11,6 +11,7 @@ komputer yang bertujuan untuk memilih serangkaian aktivitas yang
 dapat dilakukan dalam satu periode waktu, dengan batasan bahwa
 aktivitas-aktivitas tersebut tidak boleh tumpang tindih.
 
+
 *Kenapa masalah ini penting?*
 Jadwal ruangan
 Wawancara kerja
