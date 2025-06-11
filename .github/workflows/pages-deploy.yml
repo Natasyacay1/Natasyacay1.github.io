@@ -1,9 +1,15 @@
-name: "Build dan Deploy Chirpy"
-
+name: "Build and Deploy"
 on:
   push:
-    branches: [main, master]
-    paths-ignore: [.gitignore, README.md, LICENSE]
+    branches:
+      - main
+      - master
+    paths-ignore:
+      - .gitignore
+      - README.md
+      - LICENSE
+
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 permissions:
@@ -11,6 +17,7 @@ permissions:
   pages: write
   id-token: write
 
+# Allow one concurrent deployment
 concurrency:
   group: "pages"
   cancel-in-progress: true
@@ -18,59 +25,41 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      # 1. Checkout kode
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: recursive
+          # submodules: true
+          # If using the 'assets' git submodule from Chirpy Starter, uncomment above
+          # (See: https://github.com/cotes2020/chirpy-starter/tree/main/assets)
 
-      # 2. Setup Node.js (wajib untuk sass-embedded)
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v4
 
-      # 3. Install sass-embedded dari npm (hindari build native)
-      - name: Install sass-embedded via npm
-        run: |
-          npm install -g sass-embedded
-          echo "SASS_NATIVE_BINDING=true" >> $GITHUB_ENV
-
-      # 4. Setup Ruby
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.1.2
+          ruby-version: 3.3
           bundler-cache: true
 
-      # 5. Install dependencies Ruby
-      - name: Install dependencies
-        run: |
-          gem install bundler
-          bundle install
-
-      # 6. Build site
       - name: Build site
         run: bundle exec jekyll build
         env:
           JEKYLL_ENV: "production"
 
-      # 7. Verifikasi HTML (optional, tapi bagus untuk validasi)
-      - name: Verify site
+      - name: Test site
         run: |
           bundle exec htmlproofer _site \
-            --disable-external \
-            --check-html \
-            --allow_hash_href \
-            --ignore-urls "/^http:\/\/127.0.0.1/,/^http:\/\/0.0.0.0/,/^http:\/\/localhost/"
+            \-\-disable-external \
+            \-\-ignore-urls "/^http:\/\/127.0.0.1/,/^http:\/\/0.0.0.0/,/^http:\/\/localhost/"
 
-      # 8. Upload hasil build
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: _site
+          path: "_site"
 
   deploy:
     environment:
