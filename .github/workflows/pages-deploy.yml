@@ -19,34 +19,45 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      
       # 1. Checkout kode
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: recursive  # Penting untuk assets Chirpy
+          submodules: recursive
 
-      # 2. Setup Ruby
+      # 2. Setup Node.js (wajib untuk sass-embedded)
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      # 3. Install sass-embedded dari npm (hindari build native)
+      - name: Install sass-embedded via npm
+        run: |
+          npm install -g sass-embedded
+          echo "SASS_NATIVE_BINDING=true" >> $GITHUB_ENV
+
+      # 4. Setup Ruby
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.1.2  # HARUS 3.1.2
+          ruby-version: 3.1.2
           bundler-cache: true
 
-      # 3. Install dependencies
+      # 5. Install dependencies Ruby
       - name: Install dependencies
         run: |
           gem install bundler
           bundle install
 
-      # 4. Build situs
+      # 6. Build site
       - name: Build site
         run: bundle exec jekyll build
         env:
           JEKYLL_ENV: "production"
 
-      # 5. Verifikasi
+      # 7. Verifikasi HTML (optional, tapi bagus untuk validasi)
       - name: Verify site
         run: |
           bundle exec htmlproofer _site \
@@ -55,7 +66,7 @@ jobs:
             --allow_hash_href \
             --ignore-urls "/^http:\/\/127.0.0.1/,/^http:\/\/0.0.0.0/,/^http:\/\/localhost/"
 
-      # 6. Upload hasil build
+      # 8. Upload hasil build
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
