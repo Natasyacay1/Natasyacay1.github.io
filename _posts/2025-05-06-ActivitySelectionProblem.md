@@ -45,7 +45,6 @@ optimal.
 
 ## Implementasi Kode C++
 
-```cpp
 #include <iostream>
 #include <vector>
 #include <algorithm>
