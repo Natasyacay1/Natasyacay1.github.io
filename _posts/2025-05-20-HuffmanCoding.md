@@ -1,6 +1,6 @@
 ---
 title: "Fractional Knapsack"
-date: 2025-05-06 14:30:00 +0700
+date: 2025-06-11 14:30:00 +0700
 categories: [Algoritma]
 tags: [DAA, Greedy, Knapsack]
 ---
