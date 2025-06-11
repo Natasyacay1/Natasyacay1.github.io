@@ -14,7 +14,7 @@ dapat dilakukan dalam satu periode waktu, dengan batasan bahwa
 aktivitas-aktivitas tersebut tidak boleh tumpang tindih.
 
 
-*Kenapa masalah ini penting?*
+## Kenapa masalah ini penting?
 Jadwal ruangan
 Wawancara kerja
 Pengelolaan sumber daya
