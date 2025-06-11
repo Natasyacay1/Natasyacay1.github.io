@@ -1,14 +1,9 @@
-name: "Build and Deploy Chirpy"
+name: "Build dan Deploy Chirpy"
 
 on:
   push:
-    branches:
-      - main
-      - master
-    paths-ignore:
-      - .gitignore
-      - README.md
-      - LICENSE
+    branches: [main, master]
+    paths-ignore: [.gitignore, README.md, LICENSE]
   workflow_dispatch:
 
 permissions:
@@ -24,28 +19,34 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      
+      # 1. Checkout kode
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: recursive  # Required if using Chirpy Starter assets
+          submodules: recursive  # Penting untuk assets Chirpy
 
+      # 2. Setup Ruby
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.1.2  # Must match .ruby-version
+          ruby-version: 3.1.2  # HARUS 3.1.2
           bundler-cache: true
 
+      # 3. Install dependencies
       - name: Install dependencies
         run: |
           gem install bundler
           bundle install
 
+      # 4. Build situs
       - name: Build site
         run: bundle exec jekyll build --trace
         env:
           JEKYLL_ENV: production
 
+      # 5. Verifikasi
       - name: Verify site
         run: |
           bundle exec htmlproofer _site \
@@ -54,6 +55,7 @@ jobs:
             --allow_hash_href \
             --ignore-urls "/^http:\/\/127.0.0.1/,/^http:\/\/0.0.0.0/,/^http:\/\/localhost/"
 
+      # 6. Upload hasil build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
