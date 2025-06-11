@@ -42,9 +42,9 @@ jobs:
 
       # 4. Build situs
       - name: Build site
-        run: bundle exec jekyll build --trace
+        run: bundle exec jekyll build
         env:
-          JEKYLL_ENV: production
+          JEKYLL_ENV: "production"
 
       # 5. Verifikasi
       - name: Verify site
@@ -56,10 +56,10 @@ jobs:
             --ignore-urls "/^http:\/\/127.0.0.1/,/^http:\/\/0.0.0.0/,/^http:\/\/localhost/"
 
       # 6. Upload hasil build
-      - name: Upload artifact
+      - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "_site"
+          path: _site
 
   deploy:
     environment:
