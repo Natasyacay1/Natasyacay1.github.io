@@ -89,7 +89,7 @@ double fractionalKnapsack(int W, vector<Item>& items) {
 }
 
 int main() {
-    vector<Item> items = {{10, 60}, {20, 100}, {30, 120}};
+    vector<Item> items = `{{10, 60}}, {{20, 100}}, {{30, 120}}`;
     int capacity = 50;
     cout << "Item yang dipilih:\n";
     double maxValue = fractionalKnapsack(capacity, items);
